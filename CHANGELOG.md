@@ -1,5 +1,13 @@
 # ecko
 
+## 0.0.10
+
+### Patch Changes
+
+- 4dc18a0: docs: Add examples to the readme.
+- 2f500fb: fix: Minor tweaks to some arguments
+- d05426f: chore: Update the logo.
+
 ## 0.0.9
 
 ### Patch Changes

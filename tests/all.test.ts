@@ -1,6 +1,7 @@
 import { test, describe, expect, afterAll, beforeAll, afterEach } from "vitest";
 import urlJoin from "url-join";
 import { EckoServer, type EckoApi } from "../src/index.js";
+import { CallbackPayload } from "../src/database.js";
 
 const PORT = 3005;
 
@@ -396,5 +397,59 @@ describe("With query params", () => {
 
     expect(response.status).toBe(200);
     expect(body).toBe("Response from request B");
+  });
+});
+
+describe("With getResponse", () => {
+  test("Should call getResponse", async () => {
+    let getResponseArgs: CallbackPayload | undefined;
+    let beforeResponseArgs: CallbackPayload | undefined;
+    let afterResponseArgs: CallbackPayload | undefined;
+
+    ecko.register("/test/endpoint", "GET", {
+      frequency: "always",
+      getResponse: async (args) => {
+        getResponseArgs = args;
+
+        return {
+          // method should not end up in the final response
+          method: "POST",
+          headers: { "x-asdf": "value" },
+          status: 202,
+          payload: { AAA: "aaa" },
+          beforeResponse: async (args) => {
+            beforeResponseArgs = args;
+          },
+          afterResponse: async (args) => {
+            afterResponseArgs = args;
+          },
+        };
+      },
+    });
+
+    const response = await fetch(urlJoin(baseUrl, "/test/endpoint"), {
+      headers: { "x-foo": "FOO" },
+    });
+
+    const body = await response.json();
+
+    expect(response.status).toBe(202);
+    expect(body).toEqual({ AAA: "aaa" });
+    expect(getResponseArgs).toBeDefined();
+    expect(beforeResponseArgs).toBeDefined();
+    expect(afterResponseArgs).toBeDefined();
+
+    // this will never happen but just to satisfy TS
+    if (!getResponseArgs || !beforeResponseArgs || !afterResponseArgs) {
+      throw new Error("Should not happen");
+    }
+
+    expect(response.headers.get("x-asdf")).toBe("value");
+    expect(getResponseArgs.headers.get("x-foo")).toBe("FOO");
+    expect(getResponseArgs.method).toBe("get");
+    expect(beforeResponseArgs.headers.get("x-foo")).toBe("FOO");
+    expect(beforeResponseArgs.method).toBe("get");
+    expect(afterResponseArgs.headers.get("x-foo")).toBe("FOO");
+    expect(afterResponseArgs.method).toBe("get");
   });
 });

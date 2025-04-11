@@ -13,7 +13,7 @@ export type CallbackPayload = {
   /** They header key will always be lowercase. */
   headers: Map<string, string | string[] | undefined>;
   queryParams: Record<string, unknown>;
-  body: Record<string, unknown>;
+  body: any;
 };
 
 const lowercaseRequestMethods = [
@@ -50,7 +50,6 @@ export type UpperCaseRequestMethod = (typeof uppercaseRequestMethods)[number];
 export type RequestMethod = (typeof requestMethods)[number];
 
 export type EckoResponseSimple = {
-  method?: RequestMethod;
   headers?: Record<string, string>;
   /** Assumed to default to 200. */
   status?: number;
@@ -108,7 +107,7 @@ function getDatabaseKey(route: Route, method: RequestMethod) {
 
 export function guardRequestMethod(method: string): RequestMethod {
   if (requestMethods.includes(method as RequestMethod)) {
-    return method as RequestMethod;
+    return method.toLowerCase() as RequestMethod;
   } else {
     throw new Error(`Invalid request method: ${method}`);
   }

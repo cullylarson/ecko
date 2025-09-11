@@ -11,11 +11,20 @@ function normalizeHeaders(
   return new Map(headerEntries);
 }
 
+function getBody(req: Request): any {
+  if (req.headers["content-type"]?.includes("application/json")) {
+    return JSON.parse(req.body);
+  } else {
+    return req.body;
+  }
+}
+
 export function getCallbackPayload(req: Request): CallbackPayload {
   return {
     method: req.method.toLowerCase() as LowerCaseRequestMethod,
     headers: normalizeHeaders(req.headers),
     queryParams: req.query,
-    body: req.body,
+    textBody: req.body,
+    body: getBody(req),
   };
 }

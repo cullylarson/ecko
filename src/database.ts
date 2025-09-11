@@ -14,6 +14,8 @@ export type CallbackPayload = {
   headers: Map<string, string | string[] | undefined>;
   queryParams: Record<string, unknown>;
   body: any;
+  /** The raw body of the request. */
+  textBody: string;
 };
 
 const lowercaseRequestMethods = [

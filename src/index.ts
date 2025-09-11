@@ -42,7 +42,8 @@ function getStart(
 
     app.use(cors());
     app.use(express.urlencoded({ extended: true }));
-    app.use(express.json());
+    app.use(express.text({ type: "*/*" }));
+    // app.use(express.json());
 
     app.all("*", MockEndpoint(configManager, logger));
 

@@ -412,8 +412,6 @@ describe("With getResponse", () => {
         getResponseArgs = args;
 
         return {
-          // method should not end up in the final response
-          method: "POST",
           headers: { "x-asdf": "value" },
           status: 202,
           payload: { AAA: "aaa" },
@@ -452,4 +450,37 @@ describe("With getResponse", () => {
     expect(afterResponseArgs.headers.get("x-foo")).toBe("FOO");
     expect(afterResponseArgs.method).toBe("get");
   });
+});
+
+test("Should handle XML requests as plain text.", async () => {
+  const requestBody =
+    '<?xml version="1.0" encoding="UTF-8"?><root>Hello, world!</root>';
+  let foundExpectedBody = false;
+
+  ecko.register("/test/endpoint", "post", {
+    frequency: "always",
+    getResponse: async (req) => {
+      foundExpectedBody =
+        req.body === requestBody && req.textBody === requestBody;
+
+      return {
+        status: 200,
+        payload: "response body",
+      };
+    },
+  });
+
+  const response = await fetch(urlJoin(baseUrl, "/test/endpoint"), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/xml",
+    },
+    body: requestBody,
+  });
+
+  const body = await response.text();
+
+  expect(response.status).toBe(200);
+  expect(body).toBe("response body");
+  expect(foundExpectedBody).toBe(true);
 });

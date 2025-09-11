@@ -9,10 +9,10 @@ let ecko: EckoApi;
 let eckoServer: EckoServer;
 let baseUrl: string;
 
-beforeAll(() => {
+beforeAll(async () => {
   eckoServer = EckoServer();
 
-  const startResult = eckoServer.start({ port: PORT, logLevel: "error" });
+  const startResult = await eckoServer.start({ port: PORT, logLevel: "error" });
 
   ecko = startResult.ecko;
   baseUrl = startResult.baseUrl;
@@ -22,8 +22,8 @@ afterEach(() => {
   eckoServer.reset();
 });
 
-afterAll(() => {
-  eckoServer.stop();
+afterAll(async () => {
+  await eckoServer.stop();
 });
 
 test("Should register a GET endpoint and respond.", async () => {

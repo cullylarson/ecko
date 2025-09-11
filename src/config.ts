@@ -46,8 +46,21 @@ export function ConfigManager() {
       return;
     }
 
-    _config.server.close();
-    _config = undefined;
+    return new Promise<void>((resolve, reject) => {
+      if (!_config) {
+        resolve();
+        return;
+      }
+
+      _config.server.close((err) => {
+        if (err) {
+          reject(err);
+        } else {
+          _config = undefined;
+          resolve();
+        }
+      });
+    });
   }
 
   return {

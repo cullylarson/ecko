@@ -21,7 +21,7 @@ export type StartOptions = {
 function getStartReturn(
   configManager: ConfigManager,
   logger: Logger
-): ReturnType<EckoServer["start"]> {
+): Awaited<ReturnType<EckoServer["start"]>> {
   return {
     ecko: EckoApi(configManager, logger),
     baseUrl: `http://localhost:${configManager.getConfig().port}`,
@@ -32,37 +32,39 @@ function getStart(
   configManager: ConfigManager,
   logger: Logger
 ): EckoServer["start"] {
-  return ({ port, logLevel = "info" }) => {
+  return async ({ port, logLevel = "info" }) => {
     if (configManager.getIsConfigured()) {
       // already started
       return getStartReturn(configManager, logger);
     }
 
-    const app = express();
+    return new Promise((resolve) => {
+      const app = express();
 
-    app.use(cors());
-    app.use(express.urlencoded({ extended: true }));
-    app.use(express.text({ type: "*/*" }));
-    // app.use(express.json());
+      app.use(cors());
+      app.use(express.urlencoded({ extended: true }));
+      app.use(express.text({ type: "*/*" }));
+      // app.use(express.json());
 
-    app.all("*", MockEndpoint(configManager, logger));
+      app.all("*", MockEndpoint(configManager, logger));
 
-    const server = app.listen(port);
+      const server = app.listen(port, () => {
+        configManager.setConfig({
+          port,
+          logLevel,
+          database: createDatabase(),
+          server,
+        });
 
-    configManager.setConfig({
-      port,
-      logLevel,
-      database: createDatabase(),
-      server,
+        resolve(getStartReturn(configManager, logger));
+      });
     });
-
-    return getStartReturn(configManager, logger);
   };
 }
 
 function getStop(configManager: ConfigManager): EckoServer["stop"] {
-  return () => {
-    configManager.reset();
+  return async () => {
+    await configManager.reset();
   };
 }
 
@@ -81,8 +83,8 @@ function getReset(configManager: ConfigManager): EckoServer["reset"] {
 }
 
 export type EckoServer = {
-  start: (options: StartOptions) => { ecko: EckoApi; baseUrl: string };
-  stop: () => void;
+  start: (options: StartOptions) => Promise<{ ecko: EckoApi; baseUrl: string }>;
+  stop: () => Promise<void>;
   reset: () => void;
 };
 

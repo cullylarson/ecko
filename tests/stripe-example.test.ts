@@ -8,10 +8,10 @@ let ecko: EckoApi;
 let eckoServer: EckoServer;
 let stripe: Stripe;
 
-beforeAll(() => {
+beforeAll(async () => {
   eckoServer = EckoServer();
 
-  const startResult = eckoServer.start({ port: PORT, logLevel: "error" });
+  const startResult = await eckoServer.start({ port: PORT, logLevel: "error" });
 
   ecko = startResult.ecko;
 
@@ -25,8 +25,8 @@ beforeAll(() => {
   });
 });
 
-afterEach(() => {
-  eckoServer.reset();
+afterEach(async () => {
+  await eckoServer.reset();
 });
 
 afterAll(() => {

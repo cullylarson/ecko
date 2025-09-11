@@ -1,5 +1,0 @@
----
-"ecko": patch
----
-
-Move repository.

@@ -1,6 +1,6 @@
 {
   "name": "ecko",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Mock any API for testing and development.",
   "keywords": [
     "mock",

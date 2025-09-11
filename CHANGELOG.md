@@ -1,5 +1,11 @@
 # ecko
 
+## 0.0.14
+
+### Patch Changes
+
+- 48085bd: fix: Server start and stop should be async.
+
 ## 0.0.13
 
 ### Patch Changes

@@ -64,7 +64,7 @@ function getStart(
 
 function getStop(configManager: ConfigManager): EckoServer["stop"] {
   return async () => {
-    await configManager.reset();
+    await configManager.stop();
   };
 }
 
@@ -84,6 +84,8 @@ function getReset(configManager: ConfigManager): EckoServer["reset"] {
 
 export type EckoServer = {
   start: (options: StartOptions) => Promise<{ ecko: EckoApi; baseUrl: string }>;
+  /** Stops the server. If you start the server again after this, the database
+   * will be reset. */
   stop: () => Promise<void>;
   reset: () => void;
 };

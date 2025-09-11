@@ -41,7 +41,7 @@ export function ConfigManager() {
     return _config !== undefined;
   }
 
-  function reset() {
+  async function stop() {
     if (!_config) {
       return;
     }
@@ -68,6 +68,6 @@ export function ConfigManager() {
     setConfig,
     getConfig,
     setDatabase,
-    reset,
+    stop,
   };
 }

@@ -1,5 +1,11 @@
 # ecko
 
+## 0.0.12
+
+### Patch Changes
+
+- 251e108: chore: Add eslint-config-prettier dependency
+
 ## 0.0.11
 
 ### Patch Changes

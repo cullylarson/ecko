@@ -9,11 +9,11 @@
     "development"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/echobind/ecko",
+  "homepage": "https://github.com/cullylarson/ecko",
   "author": "Cully Larson <cully.larson@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/echobind/ecko.git"
+    "url": "git+https://github.com/cullylarson/ecko.git"
   },
   "type": "module",
   "scripts": {

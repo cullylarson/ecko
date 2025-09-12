@@ -43,8 +43,9 @@ function getStart(
 
       app.use(cors());
       app.use(express.urlencoded({ extended: true }));
+      // We want the request body to be plain text. We'll handle parsing on our
+      // own.
       app.use(express.text({ type: "*/*" }));
-      // app.use(express.json());
 
       app.all("*", MockEndpoint(configManager, logger));
 

@@ -143,8 +143,9 @@ Same if you have multiple endpoints with the same path and method and each with
     - `method`. The lower-case version of the method (e.g. `get`, `post`, etc).
     - `headers`. The headers of the request. Note that all the keys will be lower-case.
     - `queryParams`. Key-value pair of all query params.
-    - `body`. The request body. Note that this will be an object if the request
-      was body was sent as JSON.
+    - `body`. The request body. This will be an object if the request body was
+      sent as JSON. Otherwise it will be plain text.
+    - `textBody`. The plain text version of the request body.
   - `afterResponse` (_optional_). A function that will be called after a
     response is returned from the endpoint.
 - Instead of the `options` arguments above, you can instead provide:

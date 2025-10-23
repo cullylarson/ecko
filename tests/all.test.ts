@@ -518,3 +518,58 @@ test("Should parse application/json requests as JSON.", async () => {
   expect(body).toBe("response body");
   expect(foundExpectedBody).toBe(true);
 });
+
+test("Should handle requests with no body.", async () => {
+  let foundExpectedBody = false;
+
+  ecko.register("/test/endpoint", "delete", {
+    frequency: "always",
+    getResponse: async (req) => {
+      foundExpectedBody = req.body === undefined && req.textBody === undefined;
+
+      return {
+        status: 200,
+        payload: "response body",
+      };
+    },
+  });
+
+  const response = await fetch(urlJoin(baseUrl, "/test/endpoint"), {
+    method: "DELETE",
+  });
+
+  const body = await response.text();
+
+  expect(response.status).toBe(200);
+  expect(body).toBe("response body");
+  expect(foundExpectedBody).toBe(true);
+});
+
+test("Should handle requests application/json requests with no body.", async () => {
+  let foundExpectedBody = false;
+
+  ecko.register("/test/endpoint", "delete", {
+    frequency: "always",
+    getResponse: async (req) => {
+      foundExpectedBody = req.body === undefined && req.textBody === undefined;
+
+      return {
+        status: 200,
+        payload: "response body",
+      };
+    },
+  });
+
+  const response = await fetch(urlJoin(baseUrl, "/test/endpoint"), {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const body = await response.text();
+
+  expect(response.status).toBe(200);
+  expect(body).toBe("response body");
+  expect(foundExpectedBody).toBe(true);
+});

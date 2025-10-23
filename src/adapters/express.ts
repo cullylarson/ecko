@@ -12,7 +12,9 @@ function normalizeHeaders(
 }
 
 function getBody(req: Request): any {
-  if (req.headers["content-type"]?.includes("application/json")) {
+  if (req.body === undefined) {
+    return undefined;
+  } else if (req.headers["content-type"]?.includes("application/json")) {
     return JSON.parse(req.body);
   } else {
     return req.body;

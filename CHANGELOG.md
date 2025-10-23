@@ -1,5 +1,18 @@
 # ecko
 
+## 0.0.15
+
+### Patch Changes
+
+- 22c7606: chore: Remove commented code
+- 711f00d: Add server start and stop tests.
+- a70fb38: Add a content-type application/json test
+- 34ea2ca: docs: Add new props to example in readme.
+- 9a32b1a: chore: Add a test for multiple servers at once.
+- baee085: docs: Update readme to add awaits in example
+- e28ce0b: chore: Rename some stuff for clarity.
+- f5f2d60: Upgrade dependencies.
+
 ## 0.0.14
 
 ### Patch Changes

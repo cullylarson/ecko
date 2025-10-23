@@ -1,5 +1,11 @@
 # ecko
 
+## 0.0.16
+
+### Patch Changes
+
+- 682d88f: fix: application/json requests with no body will crash.
+
 ## 0.0.15
 
 ### Patch Changes

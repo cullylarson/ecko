@@ -484,3 +484,37 @@ test("Should handle XML requests as plain text.", async () => {
   expect(body).toBe("response body");
   expect(foundExpectedBody).toBe(true);
 });
+
+test("Should parse application/json requests as JSON.", async () => {
+  const requestBody = "{}";
+  let foundExpectedBody = false;
+
+  ecko.register("/test/endpoint", "post", {
+    frequency: "always",
+    getResponse: async (req) => {
+      foundExpectedBody =
+        typeof req.body === "object" &&
+        JSON.stringify(req.body) === requestBody &&
+        req.textBody === requestBody;
+
+      return {
+        status: 200,
+        payload: "response body",
+      };
+    },
+  });
+
+  const response = await fetch(urlJoin(baseUrl, "/test/endpoint"), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: requestBody,
+  });
+
+  const body = await response.text();
+
+  expect(response.status).toBe(200);
+  expect(body).toBe("response body");
+  expect(foundExpectedBody).toBe(true);
+});

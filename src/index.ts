@@ -47,7 +47,7 @@ function getStart(
       // own.
       app.use(express.text({ type: "*/*" }));
 
-      app.all("*", MockEndpoint(configManager, logger));
+      app.use(MockEndpoint(configManager, logger));
 
       const server = app.listen(port, () => {
         configManager.setConfig({
